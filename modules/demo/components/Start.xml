@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="Start" extends="Group">
+    <children>
+        <Rectangle width="1920" height="1080" color="#123437"/>
+        <Label translation="[100,180]" width="1700" text="Sample Library" font="font:LargeBoldSystemFont"/>
+        <Label translation="[100,280]" width="1700" text="This module was downloaded from the server and is running on Roku."/>
+        <Label translation="[100,930]" width="1700" text="Back · Return to catalog"/>
+    </children>
+</component>
