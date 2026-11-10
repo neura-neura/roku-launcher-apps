@@ -1,4 +1,8 @@
-# Roku Launcher Apps
+<p align="center">
+  <img src="docs/media/logo.svg" width="96" height="96" alt="">
+</p>
+<h1 align="center">Roku Launcher Apps</h1>
+<p align="center">SceneGraph libraries and conversion recipes for Roku App Launcher.</p>
 
 Libraries and conversion recipes for [Roku App Launcher](https://github.com/neura-neura/roku-app-launcher). Library ZIPs go on the launcher server, not in the Roku Development Application Installer.
 
@@ -8,11 +12,31 @@ Libraries and conversion recipes for [Roku App Launcher](https://github.com/neur
 | Roku Plus by JGL Customs 1.7.2 | Convert your own authorized ZIP with the launcher build's `--plus` option | The original package, embedded provider resources, and converted ZIP are not redistributed here. The provider's normal access requirements still apply. |
 | Remote Library Demo | [Release ZIP and catalog](https://github.com/neura-neura/roku-launcher-apps/releases) | Small reference module. |
 
+<p align="center">
+  <img src="docs/media/launcher-grid.jpg" width="820" alt="Noir, Roku Plus, and the demo displayed with their logos in the launcher grid">
+</p>
+
+<details>
+<summary>See the demo library running on the Roku</summary>
+
+<img src="docs/media/demo-module.jpg" width="820" alt="The downloadable demo library running on the Roku">
+
+</details>
+
+<details>
+<summary>See the Roku Plus local conversion</summary>
+
+<img src="docs/media/roku-plus.jpg" width="820" alt="Roku Plus home screen running inside the launcher">
+
+This screenshot shows a locally converted copy. The source ZIP and provider assets are not distributed in Releases.
+
+</details>
+
 Each module keeps its own provider and network requirements. On the test Roku, Noir connected to Syncplay and played a user-supplied video with subtitles. The locally converted Roku Plus opened its interface and played a public short. Its embedded JGL Customs client opened and displayed a channel list; playback from that provider was not verified.
 
 ## Install a released module
 
-Download `launcher-libraries.zip` from [Releases](https://github.com/neura-neura/roku-launcher-apps/releases). It contains `catalog.json` and an `apps/` directory for your server's document root. To keep an existing catalog, copy only the desired ZIPs and merge the matching entries from the bundle; do not overwrite unrelated entries. Use **Refresh Catalog** in the launcher. Use the launcher repository's Noir-ready ZIP when using Noir.
+Download `launcher-libraries.zip` from [Releases](https://github.com/neura-neura/roku-launcher-apps/releases). It contains `catalog.json` and `apps/` and `icons/` directories for your server's document root. To keep an existing catalog, copy only the desired ZIPs and icons, then merge the matching entries from the bundle; do not overwrite unrelated entries. Use **Refresh Catalog** in the launcher. Use the launcher repository's Noir-ready ZIP when using Noir.
 
 ## Copy-and-paste AI conversion prompt
 
@@ -24,7 +48,7 @@ Convert the attached Roku development-channel ZIP into a SceneGraph library for 
 1. Preserve the input ZIP. Record its SHA-256. Unpack into a private temporary workspace after rejecting path traversal, absolute paths, symlinks, duplicate entries, and unreasonable expanded sizes. Do not execute scripts from the attachment on the build host. Inventory the manifest, Main(), root scene, XML, BrightScript, packaged resources, dependencies, authentication and settings. Never print, commit, or package private credentials, paired configuration, personal addresses, or device identifiers in a public output. Keep required private settings separate. Preserve original licenses, branding and notices, and do not publish third-party assets unless I confirm redistribution rights.
 2. Determine whether it is already a compatible SceneGraph library, matches an existing conversion recipe, is suitable for a general conversion, or needs a custom adapter. Explain blockers that require input rather than guessing. Do not bypass activation, DRM, provider access, payment, PINs, or signing. A standalone Main() cannot run inside the host; detect dependencies on roSGScreen, main-thread loops, launch arguments, OS lifecycle or APIs that need their own channel. Use an existing recipe when the exact input version matches (for example, --noir or --plus); do not silently apply an incompatible version.
 3. Work on a copy. Make the standalone Scene/OverhangPanelSetScene entry a Group-based module under the launcher scene. Move the necessary startup behavior into the module after it is attached, using running=true. On running=false, close owned dialogs, stop video/timers/transfers/tasks, cancel async work and remove observers. Do not stop or overwrite the host's global objects. Preserve focus, remote navigation and Back behavior: inner screens close first, and Back on the module home screen bubbles to the launcher. Follow the host's focusRequested and dialog interfaces where appropriate. Route any host-level events explicitly and namespace persistent settings and temporary data. Resolve library-local scripts and packaged assets with appropriate libpkg:/ paths and verify them on device. Review nested components, dynamically created tasks, dialog callbacks, registry access, video controls, and subtitle or font resources. Keep provider protocols and the app's features intact. Do not assume a filename change or a compilation pass makes a ZIP compatible.
-4. Generate a deterministic library ZIP with the manifest at the archive root, rsg_version=1.3, and sg_component_libs_provided=<library ID>. Choose an ID starting with a letter, followed by letters/digits/underscores, unique to this module and revision. Remove the standalone Main() entry. Preserve dependencies the adapted module needs. Generate a catalog entry with version 1 in the enclosing catalog: {"title":"App name","id":"UniqueApp_v1","component":"AppModule","path":"/apps/UniqueApp_v1.zip"}. The ID must match the manifest, the component must exactly match the exported Group, and the filename must match the path. Merge the entry and ZIP with the existing server catalog; preserve existing modules and ordering. If a host change is truly necessary, explain why and provide a separate launcher ZIP; do not replace a working Roku installation without authorization. Follow the README for --libraries if integrating into a reproducible build.
+4. Generate a deterministic library ZIP with the manifest at the archive root, rsg_version=1.3, and sg_component_libs_provided=<library ID>. Choose an ID starting with a letter, followed by letters/digits/underscores, unique to this module and revision. Remove the standalone Main() entry. Preserve dependencies the adapted module needs. Generate a catalog entry with version 1 in the enclosing catalog: {"title":"App name","id":"UniqueApp_v1","component":"AppModule","path":"/apps/UniqueApp_v1.zip"}. Optionally include "icon":"/icons/UniqueApp.png" and place an authorized PNG or JPEG in the server's icons/ directory; the launcher can show a fallback initial without it. The ID must match the manifest, the component must exactly match the exported Group, and the filename must match the path. Merge the entry and ZIP with the existing server catalog; preserve existing modules and ordering. If a host change is truly necessary, explain why and provide a separate launcher ZIP; do not replace a working Roku installation without authorization. Follow the README for --libraries if integrating into a reproducible build.
 5. Test ZIP integrity, manifests, every referenced script and packaged resource, and BrightScript/XML compilation. Run the LAN server and fetch the catalog and ZIP over HTTP from the Roku's network. Verify on a real development Roku if available: refresh catalog, open the module, check assets and focus, navigate screens, open and cancel a dialog, verify relevant persisted settings, exercise any supported playback and controls using authorized media, return with Back, reopen, and switch to an existing module. Inspect the developer console for compilation and runtime errors. Test external provider features only with authorized access. If you lack network, device access, credentials, or sample media, run every independent check you can and say exactly what remains unverified; do not claim a real-device pass.
 6. Deliver the library ZIP, catalog entry, reproducible conversion recipe or patch, source/asset attribution, install steps, and a concise test report. Note any required host changes, manual steps, provider dependencies, known limitations, and the path to the unchanged original. Do not publish or upload anything unless I explicitly ask. Do not claim universal compatibility or a guaranteed first-pass conversion.
 ```

@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "apps": [
+    {
+      "title": "Noir Syncplay",
+      "id": "noir_db9595e6269d",
+      "component": "NoirModule",
+      "path": "/apps/noir_db9595e6269d.zip",
+      "icon": "/icons/noir.png"
+    },
+    {
+      "title": "Demo \u00b7 Remote Library",
+      "id": "demo_ed257b1f31f4",
+      "component": "Start",
+      "path": "/apps/demo_ed257b1f31f4.zip",
+      "icon": "/icons/demo.png"
+    }
+  ]
+}
